@@ -1,0 +1,9 @@
+---
+
+systemd_networking_packages:
+  - systemd-networkd
+  - systemd-resolved
+  - python-netaddr
+
+systemd_networking_packages_remove:
+  - NetworkManager-libnm

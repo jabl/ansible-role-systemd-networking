@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+# Fallback network config that runs dhcp on all interfaces that
+#  haven't been matched by other rules.
+[Match]
+Name=*
+[Network]
+DHCP=yes

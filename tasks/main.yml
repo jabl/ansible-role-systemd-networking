@@ -1,2 +1,35 @@
 ---
 # tasks file for ansible-role-systemd-networking
+
+- name: Load OS specific vars
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: Install packages
+  package: name="{{ systemd_networking_packages }}" state=present
+
+- name: Disable old network service
+  service: name=network enabled=no
+
+- name: Let systemd-resolved manage resolv.conf
+  file: dest=/etc/resolv.conf src=/usr/lib/systemd/resolv.conf state=link
+
+- name: Copy the fallback network config
+  copy: src=zz-fallback.network dest=/etc/systemd/network/zz-fallback.network
+
+- name: Template the default interface
+  template: src=default.network.j2 dest=/etc/systemd/network/default.network
+
+- name: Start and enable systemd-networkd
+  service: name=systemd-networkd enabled=yes state=started
+
+- name: Start and enable systemd-resolved
+  service: name=systemd-resolved enabled=yes state=started
+
+- name: Stop old network stuff
+  service: name=network state=stopped
+
+- name: remove NetworkManager
+  package: name="{{ systemd_networking_packages_remove }}" state=absent
