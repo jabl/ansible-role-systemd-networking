@@ -1,7 +1,7 @@
 ansible-role-systemd-networking
 ===============================
 
-Set up a static IP and caching DNS resolver using systemd-networkd and systemd-resolvd.
+Set up a static IP and caching DNS resolver using systemd-networkd and systemd-resolved.
 
 Requirements
 ------------
